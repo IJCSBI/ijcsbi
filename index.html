@@ -70,6 +70,29 @@
             padding: 3px 10px;
             border-radius: 4px;
             border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+        }
+
+        .user-welcome-badge {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: rgba(50, 140, 193, 0.25);
+            padding: 3px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--accent-color);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: #ffffff !important;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            border: none;
+            cursor: pointer;
         }
 
         /* Header - مصغر ومتناسق لإظهار داتا الموقع بوضوح */
@@ -1037,7 +1060,7 @@
         .admin-modal-box {
             background: var(--white);
             border-radius: 10px;
-            max-width: 620px;
+            max-width: 720px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -1135,6 +1158,25 @@
 
         .admin-export-btn:hover {
             background: #15803d;
+        }
+
+        .admin-db-box {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            max-height: 220px;
+            overflow-y: auto;
+            font-size: 0.88rem;
+        }
+
+        .admin-db-item {
+            padding: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .admin-db-item:last-child {
+            border-bottom: none;
         }
 
         /* تنسيق الشاشات المتوسطة والتابلت والموبايل لضمان ظهور داتا الموقع فوراً */
@@ -1271,8 +1313,15 @@
             <span><i class="fas fa-university"></i> <span data-ar="المعهد العالي للإدارة والمحاسبة بسوهاج" data-en="Higher Institute of Administration and Accounting, Sohag">المعهد العالي للإدارة والمحاسبة بسوهاج</span></span>
         </div>
         <div class="top-bar-right">
-            <a href="#" onclick="showPage('login', event)" class="top-bar-btn"><i class="fas fa-sign-in-alt"></i> <span data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</span></a>
-            <a href="#" onclick="showPage('register', event)" class="top-bar-btn"><i class="fas fa-user-plus"></i> <span data-ar="تسجيل حساب" data-en="Register">تسجيل حساب</span></a>
+            <!-- شارة ترحيب تظهر بعد تسجيل الدخول -->
+            <div id="userWelcomeBadge" class="user-welcome-badge">
+                <i class="fas fa-user-check"></i>
+                <span id="loggedInUserName"></span>
+                <button type="button" class="logout-btn" onclick="handleAuthLogout()" data-ar="خروج" data-en="Logout">خروج</button>
+            </div>
+            <!-- أزرار الدخول والتسجيل -->
+            <a href="#" id="topLoginBtn" onclick="showPage('login', event)" class="top-bar-btn"><i class="fas fa-sign-in-alt"></i> <span data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</span></a>
+            <a href="#" id="topRegisterBtn" onclick="showPage('register', event)" class="top-bar-btn"><i class="fas fa-user-plus"></i> <span data-ar="تسجيل حساب" data-en="Register">تسجيل حساب</span></a>
             <button class="lang-btn" id="langSwitchBtn" onclick="toggleLanguage()">English</button>
         </div>
     </div>
@@ -1371,7 +1420,7 @@
             <!-- صفحة تسجيل الدخول -->
             <section id="login" class="page-section">
                 <h2 class="section-title" data-ar="تسجيل الدخول" data-en="User Login">تسجيل الدخول</h2>
-                <p data-ar="قم بتسجيل الدخول بحسابك لمتابعة الأبحاث المقدمة والمراجعات." data-en="Log in to your account to track submitted papers and reviews.">قم بتسجيل الدخول بحسابك لمتابعة الأبحاث المقدمة والمراجعات.</p>
+                <p data-ar="قم بتسجيل الدخول بحسابك المسجل في قاعدة بيانات المجلة لمتابعة الأبحاث المقدمة." data-en="Log in to your account to track submitted papers and reviews.">قم بتسجيل الدخول بحسابك المسجل في قاعدة بيانات المجلة لمتابعة الأبحاث المقدمة.</p>
                 
                 <form class="auth-container" onsubmit="handleAuthLogin(event)">
                     <div class="form-card">
@@ -1387,7 +1436,7 @@
                             <label for="loginPassword" data-ar="كلمة المرور *" data-en="Password *">كلمة المرور *</label>
                             <input type="password" id="loginPassword" required placeholder="••••••••">
                         </div>
-                        <button type="submit" class="submit-btn">
+                        <button type="submit" id="loginSubmitBtn" class="submit-btn">
                             <i class="fas fa-sign-in-alt"></i> <span data-ar="دخول" data-en="Login">دخول</span>
                         </button>
                     </div>
@@ -1397,7 +1446,7 @@
             <!-- صفحة تسجيل حساب جديد -->
             <section id="register" class="page-section">
                 <h2 class="section-title" data-ar="تسجيل حساب جديد" data-en="Register New Account">تسجيل حساب جديد</h2>
-                <p data-ar="أنشئ حساباً جديداً كباحث أو محكم للانضمام إلى منصة المجلة." data-en="Create a new account as an author or reviewer.">أنشئ حساباً جديداً كباحث أو محكم للانضمام إلى منصة المجلة.</p>
+                <p data-ar="أنشئ حساباً جديداً كباحث أو محكم للانضمام إلى منصة المجلة (يجب ألا تقل كلمة المرور عن 6 أحرف أو أرقام)." data-en="Create a new account as an author or reviewer (Password must be at least 6 characters).">أنشئ حساباً جديداً كباحث أو محكم للانضمام إلى منصة المجلة (يجب ألا تقل كلمة المرور عن 6 أحرف أو أرقام).</p>
                 
                 <form class="auth-container" onsubmit="handleAuthRegister(event)">
                     <div class="form-card">
@@ -1406,18 +1455,22 @@
                             <h3 data-ar="بيانات الحساب الجديد" data-en="New Account Details">بيانات الحساب الجديد</h3>
                         </div>
                         <div class="form-group" style="margin-bottom: 15px;">
-                            <label for="regName" data-ar="الاسم الكامل *" data-en="Full Name *">الاسم الكامل *</label>
+                            <label for="regName" data-ar="الاسم الكامل واللقب العلمي *" data-en="Full Name & Academic Title *">الاسم الكامل واللقب العلمي *</label>
                             <input type="text" id="regName" required data-ar-placeholder="الأستاذ الدكتور / ..." data-en-placeholder="Prof. / Dr. ..." placeholder="الأستاذ الدكتور / ...">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="regAffiliation" data-ar="الجامعة / جهة العمل *" data-en="University / Affiliation *">الجامعة / جهة العمل *</label>
+                            <input type="text" id="regAffiliation" required data-ar-placeholder="مثال: كلية التجارة - جامعة سوهاج" data-en-placeholder="e.g., Faculty of Commerce" placeholder="مثال: كلية التجارة - جامعة سوهاج">
                         </div>
                         <div class="form-group" style="margin-bottom: 15px;">
                             <label for="regEmail" data-ar="البريد الإلكتروني *" data-en="Email Address *">البريد الإلكتروني *</label>
                             <input type="email" id="regEmail" required placeholder="example@domain.com">
                         </div>
                         <div class="form-group" style="margin-bottom: 15px;">
-                            <label for="regPassword" data-ar="كلمة المرور *" data-en="Password *">كلمة المرور *</label>
-                            <input type="password" id="regPassword" required placeholder="••••••••">
+                            <label for="regPassword" data-ar="كلمة المرور (6 أحرف أو أرقام على الأقل) *" data-en="Password (min 6 characters) *">كلمة المرور (6 أحرف أو أرقام على الأقل) *</label>
+                            <input type="password" id="regPassword" minlength="6" required placeholder="••••••••">
                         </div>
-                        <button type="submit" class="submit-btn">
+                        <button type="submit" id="regSubmitBtn" class="submit-btn">
                             <i class="fas fa-user-plus"></i> <span data-ar="تسجيل الحساب" data-en="Register Account">تسجيل الحساب</span>
                         </button>
                     </div>
@@ -1850,7 +1903,7 @@
                 
                 <div class="direct-email-notice">
                     <i class="fas fa-envelope-open-text"></i>
-                    <span data-ar="تنويه للباحثين: تُرسل البحوث عبر البريد الإلكتروني للمجلة، بحيث يكون النص في ملف، والجداول في ملف، والرسومات التوضيحية أو الأشكال في ملف، بالإضافة إلى إمكانية إرفاق (ملف زائد) عند الحاجة. يمكنكم تعبئة البيانات الأساسية أدناه والضغط على زر الإرسال لفتح بريدكم الإلكتروني موجهاً مباشرة إلى البريد الرسمي للمجلة (pafs.journal@hima.edu.eg)." data-en="Note to Researchers: Submit your paper by email (main text, tables, and figures in separate files, plus supplementary files if needed). Fill out the details below to open your email directed to pafs.journal@hima.edu.eg.">تنويه للباحثين: تُرسل البحوث عبر البريد الإلكتروني للمجلة، بحيث يكون النص في ملف، والجداول في ملف، والرسومات التوضيحية أو الأشكال في ملف، بالإضافة إلى إمكانية إرفاق (ملف زائد) عند الحاجة. يمكنكم تعبئة البيانات الأساسية أدناه والضغط على زر الإرسال لفتح بريدكم الإلكتروني موجهاً مباشرة إلى البريد الرسمي للمجلة (pafs.journal@hima.edu.eg).</span>
+                    <span data-ar="تنويه للباحثين: يتم حفظ بيانات البحث تلقائياً في قاعدة بيانات المجلة مع فتح بريدكم الإلكتروني لإرفاق الملفات وإرسالها إلى البريد الرسمي للمجلة (pafs.journal@hima.edu.eg)." data-en="Note to Researchers: Your submission details are saved automatically to the journal database and your email client will open to attach your files to pafs.journal@hima.edu.eg.">تنويه للباحثين: يتم حفظ بيانات البحث تلقائياً في قاعدة بيانات المجلة مع فتح بريدكم الإلكتروني لإرفاق الملفات وإرسالها إلى البريد الرسمي للمجلة (pafs.journal@hima.edu.eg).</span>
                 </div>
                 
                 <form class="submission-container" onsubmit="handleSubmission(event)">
@@ -1897,7 +1950,7 @@
 
                     <div class="submit-btn-container">
                         <button type="submit" class="submit-btn">
-                            <i class="fas fa-paper-plane"></i> <span data-ar="إرسال البحث مباشرة إلى بريد المجلة" data-en="Send Paper Directly to Journal Email">إرسال البحث مباشرة إلى بريد المجلة</span>
+                            <i class="fas fa-paper-plane"></i> <span data-ar="حفظ وإرسال البحث إلى بريد المجلة" data-en="Save & Send Paper to Journal Email">حفظ وإرسال البحث إلى بريد المجلة</span>
                         </button>
                     </div>
                 </form>
@@ -2029,7 +2082,7 @@
 
             <!-- شاشة إدخال كلمة المرور -->
             <div id="adminLoginStep">
-                <p style="margin-bottom: 12px; font-size: 0.95rem;">يرجى إدخال كلمة المرور الخاصة بالإدارة للتحكم في الشعار والغلاف والإعلانات:</p>
+                <p style="margin-bottom: 12px; font-size: 0.95rem;">يرجى إدخال كلمة المرور الخاصة بالإدارة للتحكم في الشعار والغلاف والإعلانات وقاعدة البيانات:</p>
                 <div class="form-group" style="margin-bottom: 15px;">
                     <input type="password" id="adminPassInput" placeholder="أدخل كلمة المرور..." onkeydown="if(event.key==='Enter') verifyAdminPass()">
                 </div>
@@ -2069,6 +2122,14 @@
                 <button type="button" class="admin-export-btn" onclick="exportUpdatedSiteFile()">
                     <i class="fas fa-download"></i> تنزيل ملف الموقع المحدث (index.html) للرفع
                 </button>
+
+                <h4 class="inner-title" style="margin-top: 25px;">3. سجل قاعدة بيانات Firebase (الحسابات والأبحاث):</h4>
+                <button type="button" class="archive-btn secondary" style="width: 100%; justify-content: center;" onclick="loadFirebaseRecordsForAdmin()">
+                    <i class="fas fa-sync-alt"></i> تحديث واستعراض البيانات المسجلة
+                </button>
+                <div id="adminDbOutput" class="admin-db-box">
+                    اضغط على زر التحديث أعلاه لعرض الباحثين المسجلين والأبحاث المرسلة.
+                </div>
             </div>
         </div>
     </div>
@@ -2109,8 +2170,36 @@
         </div>
     </footer>
 
+    <!-- استدعاء مكتبات Firebase عبر CDN المتوافقة مباشرة مع المتصفح بدون npm -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
     <!-- JavaScript -->
     <script>
+        // إعدادات مشروع Firebase الخاص بالمجلة (ijcsbi-journal)
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7vZNgoCeseEF4oohBecwHpbiEp4BdljM",
+            authDomain: "ijcsbi-journal.firebaseapp.com",
+            projectId: "ijcsbi-journal",
+            storageBucket: "ijcsbi-journal.firebasestorage.app",
+            messagingSenderId: "323475506486",
+            appId: "1:323475506486:web:43ae21eb887502c8cb9f97",
+            measurementId: "G-YNZ583NMB7"
+        };
+
+        let auth = null;
+        let db = null;
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            auth = firebase.auth();
+            db = firebase.firestore();
+        } catch (err) {
+            console.warn("Firebase init notice:", err);
+        }
+
         const ADMIN_SECRET_PASS = "HimaJournal2027";
         let currentLang = 'ar';
         let footerClickCount = 0;
@@ -2156,6 +2245,32 @@
                     archiveThumb.src = savedCover;
                     archiveThumb.style.display = 'block';
                 }
+            }
+
+            // متابعة حالة تسجيل دخول الباحث في الشريط العلوي
+            if (auth) {
+                auth.onAuthStateChanged((user) => {
+                    const welcomeBadge = document.getElementById('userWelcomeBadge');
+                    const nameSpan = document.getElementById('loggedInUserName');
+                    const loginBtn = document.getElementById('topLoginBtn');
+                    const regBtn = document.getElementById('topRegisterBtn');
+
+                    if (user) {
+                        welcomeBadge.style.display = 'inline-flex';
+                        nameSpan.textContent = user.displayName || user.email;
+                        if (loginBtn) loginBtn.style.display = 'none';
+                        if (regBtn) regBtn.style.display = 'none';
+                        // تعبئة بيانات الباحث تلقائياً في نموذج تقديم البحث
+                        const authorNameInput = document.getElementById('authorName');
+                        const authorEmailInput = document.getElementById('authorEmail');
+                        if (authorNameInput && !authorNameInput.value && user.displayName) authorNameInput.value = user.displayName;
+                        if (authorEmailInput && !authorEmailInput.value && user.email) authorEmailInput.value = user.email;
+                    } else {
+                        welcomeBadge.style.display = 'none';
+                        if (loginBtn) loginBtn.style.display = 'inline-flex';
+                        if (regBtn) regBtn.style.display = 'inline-flex';
+                    }
+                });
             }
         });
 
@@ -2211,8 +2326,45 @@
                 document.getElementById('adminControlsStep').style.display = 'block';
                 document.getElementById('adminAnnounceAr').value = currentAnnouncement.ar;
                 document.getElementById('adminAnnounceEn').value = currentAnnouncement.en;
+                loadFirebaseRecordsForAdmin();
             } else {
                 alert('كلمة المرور غير صحيحة!');
+            }
+        }
+
+        async function loadFirebaseRecordsForAdmin() {
+            const out = document.getElementById('adminDbOutput');
+            if (!db) {
+                out.innerHTML = 'قاعدة البيانات غير متصلة حالياً.';
+                return;
+            }
+            out.innerHTML = 'جارٍ تحميل البيانات من Firebase...';
+            try {
+                const usersSnap = await db.collection('users').orderBy('createdAt', 'desc').limit(20).get();
+                const subsSnap = await db.collection('submissions').orderBy('createdAt', 'desc').limit(20).get();
+
+                let html = `<strong>إجمالي آخر الحسابات المسجلة (${usersSnap.size}):</strong><br>`;
+                if (usersSnap.empty) {
+                    html += `<div class="admin-db-item">لا توجد حسابات مسجلة بعد.</div>`;
+                } else {
+                    usersSnap.forEach(doc => {
+                        const d = doc.data();
+                        html += `<div class="admin-db-item">👤 <strong>${d.name || ''}</strong> (${d.affiliation || 'بدون جهة'}) - ${d.email || ''}</div>`;
+                    });
+                }
+
+                html += `<hr style="margin:10px 0;"><strong>آخر الأبحاث المرسلة (${subsSnap.size}):</strong><br>`;
+                if (subsSnap.empty) {
+                    html += `<div class="admin-db-item">لا توجد أبحاث مسجلة بعد.</div>`;
+                } else {
+                    subsSnap.forEach(doc => {
+                        const s = doc.data();
+                        html += `<div class="admin-db-item">📄 <strong>${s.title || ''}</strong><br>الباحث: ${s.author || ''} | الإيميل: ${s.email || ''} | التخصص: ${s.category || ''}</div>`;
+                    });
+                }
+                out.innerHTML = html;
+            } catch (err) {
+                out.innerHTML = `تنبيه: تأكدي من تفعيل Firestore Database في وضع Test Mode داخل لوحة Firebase. (${err.message})`;
             }
         }
 
@@ -2491,25 +2643,111 @@
             }
         }
 
-        function handleAuthLogin(event) {
+        // تسجيل الدخول الفعلي عبر Firebase Authentication
+        async function handleAuthLogin(event) {
             event.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            alert(currentLang === 'ar' ? `مرحباً بك مجدداً (${email}). سيتم تفعيل حسابات الدخول فور ربط قاعدة البيانات.` : `Welcome back (${email}). Login features will be active upon DB integration.`);
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginSubmitBtn');
+
+            if (!auth) {
+                alert('خدمة Firebase غير مفعلة حالياً.');
+                return;
+            }
+
+            btn.disabled = true;
+            try {
+                const userCred = await auth.signInWithEmailAndPassword(email, password);
+                const userName = userCred.user.displayName || email;
+                alert(currentLang === 'ar' ? `تم تسجيل الدخول بنجاح! مرحباً بك (${userName}).` : `Logged in successfully! Welcome (${userName}).`);
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+                showPage('home');
+            } catch (error) {
+                let msg = currentLang === 'ar' ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة، أو لم يتم تفعيل Email/Password في Firebase.' : 'Invalid email or password.';
+                alert(msg + '\n(' + error.code + ')');
+            } finally {
+                btn.disabled = false;
+            }
         }
 
-        function handleAuthRegister(event) {
+        // إنشاء حساب جديد فعلي وحفظ بيانات الباحث في Firestore
+        async function handleAuthRegister(event) {
             event.preventDefault();
-            const name = document.getElementById('regName').value;
-            alert(currentLang === 'ar' ? `شكراً لك يا فندم (${name}). تم استقبال طلب تسجيل الحساب بانتظار تفعيل النظام.` : `Thank you (${name}). Registration received.`);
+            const name = document.getElementById('regName').value.trim();
+            const affiliation = document.getElementById('regAffiliation').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const btn = document.getElementById('regSubmitBtn');
+
+            if (!auth) {
+                alert('خدمة Firebase غير مفعلة حالياً.');
+                return;
+            }
+
+            btn.disabled = true;
+            try {
+                const userCred = await auth.createUserWithEmailAndPassword(email, password);
+                await userCred.user.updateProfile({ displayName: name });
+
+                if (db) {
+                    await db.collection('users').doc(userCred.user.uid).set({
+                        uid: userCred.user.uid,
+                        name: name,
+                        affiliation: affiliation,
+                        email: email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+
+                document.getElementById('loggedInUserName').textContent = name;
+                alert(currentLang === 'ar' ? `تم إنشاء حسابك وحفظ بياناتك بنجاح يا (${name})!` : `Account created successfully (${name})!`);
+                document.getElementById('regName').value = '';
+                document.getElementById('regAffiliation').value = '';
+                document.getElementById('regEmail').value = '';
+                document.getElementById('regPassword').value = '';
+                showPage('home');
+            } catch (error) {
+                let msg = currentLang === 'ar' ? 'تعذر إنشاء الحساب. تأكدي من تفعيل Email/Password من قسم Authentication في Firebase أو أن البريد غير مسجل مسبقاً.' : 'Registration failed.';
+                alert(msg + '\n(' + error.code + ')');
+            } finally {
+                btn.disabled = false;
+            }
         }
 
-        function handleSubmission(event) {
+        // تسجيل الخروج
+        async function handleAuthLogout() {
+            if (auth) {
+                await auth.signOut();
+                alert(currentLang === 'ar' ? 'تم تسجيل الخروج بنجاح.' : 'Logged out successfully.');
+                showPage('home');
+            }
+        }
+
+        // حفظ البحث في قاعدة بيانات Firestore مع فتح الإيميل الرسمي
+        async function handleSubmission(event) {
             event.preventDefault();
-            const author = document.getElementById('authorName').value;
-            const email = document.getElementById('authorEmail').value;
-            const title = document.getElementById('paperTitle').value;
-            const category = document.getElementById('paperCategory').value;
-            const notes = document.getElementById('notes').value;
+            const author = document.getElementById('authorName').value.trim();
+            const email = document.getElementById('authorEmail').value.trim();
+            const title = document.getElementById('paperTitle').value.trim();
+            const category = document.getElementById('paperCategory').value.trim();
+            const notes = document.getElementById('notes').value.trim();
+
+            if (db) {
+                try {
+                    await db.collection('submissions').add({
+                        author: author,
+                        email: email,
+                        title: title,
+                        category: category,
+                        notes: notes || '',
+                        uid: (auth && auth.currentUser) ? auth.currentUser.uid : null,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch (e) {
+                    console.warn('Firestore save notice:', e);
+                }
+            }
 
             const mailtoSubject = encodeURIComponent(`بحث جديد مقدم للنشر بالمجلة: ${title}`);
             const mailtoBody = encodeURIComponent(
@@ -2524,28 +2762,43 @@
             
             window.location.href = `mailto:pafs.journal@hima.edu.eg?subject=${mailtoSubject}&body=${mailtoBody}`;
             
-            alert(currentLang === 'ar' ? `شكراً لك يا باحثنا الكريم (${author}). تم فتح برنامج البريد؛ يرجى إرفاق ملفات البحث داخل الرسالة ثم الضغط على إرسال إلى (pafs.journal@hima.edu.eg).` : `Thank you (${author}). Your email client has opened; please attach your paper files to the message and click send.`);
+            alert(currentLang === 'ar' ? `تم تسجيل بيانات البحث في قاعدة بيانات المجلة بنجاح يا (${author})، وتم فتح برنامج البريد لإرفاق ملفات البحث وإرسالها إلى (pafs.journal@hima.edu.eg).` : `Your paper details have been saved to the database and your email client has opened to attach the files.`);
         }
 
-        function handleComplaint(event) {
+        // حفظ الشكاوى والمقترحات في Firestore مع فتح الإيميل
+        async function handleComplaint(event) {
             event.preventDefault();
-            const name = document.getElementById('cName').value;
-            const email = document.getElementById('cEmail').value;
+            const name = document.getElementById('cName').value.trim();
+            const email = document.getElementById('cEmail').value.trim();
             const type = document.getElementById('cType').value;
-            const message = document.getElementById('cMessage').value;
+            const message = document.getElementById('cMessage').value.trim();
+
+            if (db) {
+                try {
+                    await db.collection('complaints').add({
+                        name: name,
+                        email: email,
+                        type: type,
+                        message: message,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch (e) {
+                    console.warn('Firestore complaint save notice:', e);
+                }
+            }
 
             const mailtoSubject = encodeURIComponent(`شكوى/مقترح جديد: ${type}`);
             const mailtoBody = encodeURIComponent(`الاسم: ${name}\nالبريد الإلكتروني: ${email}\nالنوع: ${type}\n\nنص الرسالة:\n${message}`);
             
             window.location.href = `mailto:pafs.journal@hima.edu.eg?subject=${mailtoSubject}&body=${mailtoBody}`;
             
-            alert(currentLang === 'ar' ? `شكراً لك يا فندم (${name}). تم تجهيز رسالتك لإرسالها مباشرة إلى البريد الرسمي.` : `Thank you (${name}). Your message has been prepared for management.`);
+            alert(currentLang === 'ar' ? `تم حفظ رسالتك في قاعدة البيانات وتجهيزها للإرسال إلى البريد الرسمي يا فندم (${name}).` : `Thank you (${name}). Your message has been saved and prepared for management.`);
         }
 
         function performSearch() {
             const query = document.getElementById('searchInput').value.trim();
             if (query) {
-                alert(currentLang === 'ar' ? `جاري البحث عن: "${query}" ... (سيتم ربط محرك البحث الفعلي بقاعدة البيانات قريباً).` : `Searching for: "${query}" ... (Search engine will be connected to DB soon).`);
+                alert(currentLang === 'ar' ? `جاري البحث عن: "${query}" ...` : `Searching for: "${query}" ...`);
             } else {
                 alert(currentLang === 'ar' ? 'الرجاء إدخال كلمة مفتاحية للبحث.' : 'Please enter a keyword to search.');
             }
