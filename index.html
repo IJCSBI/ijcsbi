@@ -1903,7 +1903,7 @@
                 
                 <div class="direct-email-notice">
                     <i class="fas fa-envelope-open-text"></i>
-                    <span data-ar="تنويه للباحثين: يتم حفظ بيانات البحث تلقائياً في قاعدة بيانات المجلة مع فتح بريدكم الإلكتروني لإرفاق الملفات وإرسالها إلى البريد الرسمي للمجلة (pafs.journal@hima.edu.eg)." data-en="Note to Researchers: Your submission details are saved automatically to the journal database and your email client will open to attach your files to pafs.journal@hima.edu.eg.">تنويه للباحثين: يتم حفظ بيانات البحث تلقائياً في قاعدة بيانات المجلة مع فتح بريدكم الإلكتروني لإرفاق الملفات وإرسالها إلى البريد الرسمي للمجلة (pafs.journal@hima.edu.eg).</span>
+                    <span data-ar="تنويه للباحثين: يتم حفظ بيانات البحث تلقائياً في قاعدة بيانات المجلة مع فتح بريدكم الإلكتروني لإرفاق الملفات وإرسالها إلى البريد الرسمي للمجلة (ijcsbi@hima.edu.eg)." data-en="Note to Researchers: Your submission details are saved automatically to the journal database and your email client will open to attach your files to ijcsbi@hima.edu.eg.">تنويه للباحثين: يتم حفظ بيانات البحث تلقائياً في قاعدة بيانات المجلة مع فتح بريدكم الإلكتروني لإرفاق الملفات وإرسالها إلى البريد الرسمي للمجلة (ijcsbi@hima.edu.eg).</span>
                 </div>
                 
                 <form class="submission-container" onsubmit="handleSubmission(event)">
@@ -2032,7 +2032,7 @@
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-envelope"></i>
-                        <span><strong data-ar="البريد الإلكتروني:" data-en="Email:">البريد الإلكتروني:</strong> <a href="mailto:pafs.journal@hima.edu.eg" style="color: var(--accent-color); text-decoration: none;">pafs.journal@hima.edu.eg</a></span>
+                        <span><strong data-ar="البريد الإلكتروني:" data-en="Email:">البريد الإلكتروني:</strong> <a href="mailto:ijcsbi@hima.edu.eg" style="color: var(--accent-color); text-decoration: none;">ijcsbi@hima.edu.eg</a></span>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-phone-alt"></i>
@@ -2145,7 +2145,7 @@
                     <a href="https://wa.me/201000375654" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://t.me/+201000375654" target="_blank" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
                     <a href="https://scholar.google.com" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
-                    <a href="mailto:pafs.journal@hima.edu.eg" title="Email"><i class="fas fa-envelope"></i></a>
+                    <a href="mailto:ijcsbi@hima.edu.eg" title="Email"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
             <div>
@@ -2161,7 +2161,7 @@
                 <h3 data-ar="روابط أكاديمية" data-en="Academic Links">روابط أكاديمية</h3>
                 <p><a href="https://scholar.google.com" target="_blank" style="color: #94a3b8; text-decoration: none;"><i class="fas fa-graduation-cap"></i> <span data-ar="البحث العلمي (Google Scholar)" data-en="Google Scholar">البحث العلمي (Google Scholar)</span></a></p>
                 <p><a href="https://hima.edu.eg/" target="_blank" style="color: #94a3b8; text-decoration: none;"><i class="fas fa-university"></i> <span data-ar="موقع المعهد الرسمي" data-en="Official Institute Website">موقع المعهد الرسمي</span></a></p>
-                <p><span data-ar="البريد:" data-en="Email:">البريد:</span> pafs.journal@hima.edu.eg</p>
+                <p><span data-ar="البريد:" data-en="Email:">البريد:</span> ijcsbi@hima.edu.eg</p>
                 <p><span data-ar="الهاتف:" data-en="Phone:">الهاتف:</span> +20 01000375654</p>
             </div>
         </div>
@@ -2760,9 +2760,9 @@
                 `يرجى إرفاق ملفات البحث (النص، الجداول، الأشكال، والملف الزائد عند الحاجة) في هذه الرسالة قبل الضغط على إرسال.`
             );
             
-            window.location.href = `mailto:pafs.journal@hima.edu.eg?subject=${mailtoSubject}&body=${mailtoBody}`;
+            window.location.href = `mailto:ijcsbi@hima.edu.eg?subject=${mailtoSubject}&body=${mailtoBody}`;
             
-            alert(currentLang === 'ar' ? `تم تسجيل بيانات البحث في قاعدة بيانات المجلة بنجاح يا (${author})، وتم فتح برنامج البريد لإرفاق ملفات البحث وإرسالها إلى (pafs.journal@hima.edu.eg).` : `Your paper details have been saved to the database and your email client has opened to attach the files.`);
+            alert(currentLang === 'ar' ? `تم تسجيل بيانات البحث في قاعدة بيانات المجلة بنجاح يا (${author})، وتم فتح برنامج البريد لإرفاق ملفات البحث وإرسالها إلى (ijcsbi@hima.edu.eg).` : `Your paper details have been saved to the database and your email client has opened to attach the files.`);
         }
 
         // حفظ الشكاوى والمقترحات في Firestore مع فتح الإيميل
@@ -2790,7 +2790,7 @@
             const mailtoSubject = encodeURIComponent(`شكوى/مقترح جديد: ${type}`);
             const mailtoBody = encodeURIComponent(`الاسم: ${name}\nالبريد الإلكتروني: ${email}\nالنوع: ${type}\n\nنص الرسالة:\n${message}`);
             
-            window.location.href = `mailto:pafs.journal@hima.edu.eg?subject=${mailtoSubject}&body=${mailtoBody}`;
+            window.location.href = `mailto:ijcsbi@hima.edu.eg?subject=${mailtoSubject}&body=${mailtoBody}`;
             
             alert(currentLang === 'ar' ? `تم حفظ رسالتك في قاعدة البيانات وتجهيزها للإرسال إلى البريد الرسمي يا فندم (${name}).` : `Thank you (${name}). Your message has been saved and prepared for management.`);
         }
